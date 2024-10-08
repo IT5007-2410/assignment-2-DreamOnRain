@@ -132,13 +132,25 @@ class Delete extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     /*Q5. Fetch the passenger details from the deletion form and call deleteTraveller()*/
+    const form = document.forms.deleteTraveller;
+    this.props.deleteTraveller({
+      name: form.travellerName.value,
+      passportNumber: form.travellerPassport.value,
+    });
+    form.travellerName.value = '';
+    form.travellerPassport.value = '';
   }
 
   render() {
     return (
       <form name="deleteTraveller" onSubmit={this.handleSubmit}>
-	    {/*Q5. Placeholder form to enter information on which passenger's ticket needs to be deleted. Below code is just an example.*/}
-	<input type="text" name="travellername" placeholder="Name" />
+      {/*Q5. Placeholder form to enter information on which passenger's ticket needs to be deleted. Below code is just an example.*/}
+        <label>Name: </label>
+        <input type="text" name="travellerName"/>
+        <br />
+        <label>Passport Number: </label>
+        <input type="text" name="travellerPassport"/>
+        <br />
         <button>Delete</button>
       </form>
     );
@@ -208,7 +220,12 @@ class TicketToRide extends React.Component {
   }
 
   deleteTraveller(passenger) {
-	  /*Q5. Write code to delete a passenger from the traveller state variable.*/
+    /*Q5. Write code to delete a passenger from the traveller state variable.*/
+    const newTravellers = this.state.travellers.slice();
+    const index = newTravellers.findIndex(traveller => traveller.name === passenger.name && traveller.passportNumber === passenger.passportNumber);
+    if (index < 0) return;
+    newTravellers.splice(index, 1);
+    this.setState({travellers: newTravellers});
   }
   render() {
     return (
@@ -232,7 +249,7 @@ class TicketToRide extends React.Component {
         {/*Q4. Code to call the component that adds a traveller.*/}
         {this.state.selector === 3 && <Add bookTraveller={this.bookTraveller}/>}
         {/*Q5. Code to call the component that deletes a traveller based on a given attribute.*/}
-        {this.state.selector === 4 && <Delete />}
+        {this.state.selector === 4 && <Delete deleteTraveller={this.deleteTraveller}/>}
       </div>
       </div>
     );
