@@ -71,13 +71,52 @@ class Add extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     /*Q4. Fetch the passenger details from the add form and call bookTraveller()*/
+    const form = document.forms.addTraveller;
+    console.log(form.travellerName.value);
+    this.props.bookTraveller({
+      name: form.travellerName.value,
+      phone: form.travellerPhone.value,
+      email: form.travellerEmail.value,
+      age: form.travellerAge.value,
+      passportNumber: form.travellerPassport.value,
+      bookingTime: new Date().toLocaleString(),
+      bookingNumber: form.travellerBookingNumber.value,
+      bookingSeat: form.travellerBookingSeat.value,
+    });
+    form.travellerName.value = '';
+    form.travellerPhone.value = '';
+    form.travellerEmail.value = '';
+    form.travellerAge.value = '';
+    form.travellerPassport.value = '';
+    form.travellerBookingNumber.value = '';
+    form.travellerBookingSeat.value = '';
   }
 
   render() {
     return (
       <form name="addTraveller" onSubmit={this.handleSubmit}>
 	    {/*Q4. Placeholder to enter passenger details. Below code is just an example.*/}
-        <input type="text" name="travellername" placeholder="Name" />
+        <label>Name: </label>
+        <input type="text" name="travellerName"/>
+        <br />
+        <label>Phone: </label>
+        <input type="text" name="travellerPhone"/>
+        <br />
+        <label>Email: </label>
+        <input type="text" name="travellerEmail"/>
+        <br />
+        <label>Age: </label>
+        <input type="text" name="travellerAge"/>
+        <br />
+        <label>Passport Number: </label>
+        <input type="text" name="travellerPassport"/>
+        <br />
+        <label>Booking Number: </label>
+        <input type="text" name="travellerBookingNumber"/>
+        <br />
+        <label>Booking Seat: </label>
+        <input type="text" name="travellerBookingSeat"/>
+        <br />
         <button>Add</button>
       </form>
     );
@@ -152,7 +191,20 @@ class TicketToRide extends React.Component {
   }
 
   bookTraveller(passenger) {
-	    /*Q4. Write code to add a passenger to the traveller state variable.*/
+    /*Q4. Write code to add a passenger to the traveller state variable.*/
+    const newTravellers = this.state.travellers.slice();
+    newTravellers.push({
+      id: this.state.travellers.length + 1,
+      name: passenger.name,
+      phone: passenger.phone,
+      email: passenger.email,
+      age: passenger.age,
+      passportNumber: passenger.passportNumber,
+      bookingTime: passenger.bookingTime,
+      bookingNumber: passenger.bookingNumber,
+      bookingSeat: passenger.bookingSeat,
+    });
+    this.setState({travellers: newTravellers});
   }
 
   deleteTraveller(passenger) {
@@ -178,7 +230,7 @@ class TicketToRide extends React.Component {
         {/*Q3. Code to call component that Displays Travellers.*/}
         {this.state.selector === 2 && <Display travellers={this.state.travellers}/>}
         {/*Q4. Code to call the component that adds a traveller.*/}
-        {this.state.selector === 3 && <Add />}
+        {this.state.selector === 3 && <Add bookTraveller={this.bookTraveller}/>}
         {/*Q5. Code to call the component that deletes a traveller based on a given attribute.*/}
         {this.state.selector === 4 && <Delete />}
       </div>
