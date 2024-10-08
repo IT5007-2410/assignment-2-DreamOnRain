@@ -1,12 +1,14 @@
 /*Q1. JS Variable needs to be created here. Below variable is just an example. Try to add more attributes.*/
 const initialTravellers = [
   {
-    id: 1, name: 'Jack', phone: 88885555,
-    bookingTime: new Date(),
+    id: 1, name: 'Jack', phone: 88885555, email: 'jack@u.nus.edu',
+    age: 25, passportNumber: 'A123456',
+    bookingTime: new Date(), bookingNumber: 'SG123', bookingSeat: '001A',
   },
   {
-    id: 2, name: 'Rose', phone: 88884444,
-    bookingTime: new Date(),
+    id: 2, name: 'Rose', phone: 88884444, email: 'rose@u.nus.edu',
+    age: 22, passportNumber: 'A456789',
+    bookingTime: new Date(), bookingNumber: 'SG234', bookingSeat: '002B',
   },
 ];
 
