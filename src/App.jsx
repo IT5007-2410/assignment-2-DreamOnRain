@@ -2,13 +2,13 @@
 const initialTravellers = [
   {
     id: 1, name: 'Jack', phone: 88885555, email: 'jack@u.nus.edu',
-    age: 25, passportNumber: 'A123456',
-    bookingTime: new Date().toLocaleString(), bookingNumber: 'SG123', bookingSeat: '01A',
+    age: 25, passportNumber: 'A123456', gender: 'male',
+    bookingTime: new Date().toLocaleString(), bookingSeat: '01A',
   },
   {
     id: 2, name: 'Rose', phone: 88884444, email: 'rose@u.nus.edu',
-    age: 22, passportNumber: 'A456789',
-    bookingTime: new Date().toLocaleString(), bookingNumber: 'SG234', bookingSeat: '02B',
+    age: 22, passportNumber: 'A456789', gender: 'female',
+    bookingTime: new Date().toLocaleString(), bookingSeat: '02B',
   },
 ];
 
@@ -24,8 +24,8 @@ function TravellerRow(props) {
       <td>{traveller.email}</td>
       <td>{traveller.age}</td>
       <td>{traveller.passportNumber}</td>
+      <td>{traveller.gender}</td>
       <td>{traveller.bookingTime}</td>
-      <td>{traveller.bookingNumber}</td>
       <td>{traveller.bookingSeat}</td>
     </tr>
   );
@@ -46,8 +46,8 @@ function Display(props) {
           <th>Email</th>
           <th>Age</th>
           <th>Passport Number</th>
+          <th>Gender</th>
           <th>Booking Time</th>
-          <th>Booking Number</th>
           <th>Booking Seat</th>
         </tr>
       </thead>
@@ -78,8 +78,8 @@ class Add extends React.Component {
       email: form.travellerEmail.value,
       age: form.travellerAge.value,
       passportNumber: form.travellerPassport.value,
+      gender: form.travellerGender.value,
       bookingTime: new Date().toLocaleString(),
-      bookingNumber: form.travellerBookingNumber.value,
       bookingSeat: form.travellerBookingSeat.value,
     });
     form.travellerName.value = '';
@@ -87,48 +87,47 @@ class Add extends React.Component {
     form.travellerEmail.value = '';
     form.travellerAge.value = '';
     form.travellerPassport.value = '';
-    form.travellerBookingNumber.value = '';
+    form.travellerGender.value = '';
     form.travellerBookingSeat.value = '';
   }
 
   render() {
     return (
-      <form name="addTraveller" onSubmit={this.handleSubmit}>
+      <form name="addTraveller" onSubmit={this.handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px', maxWidth: '400px' }}>
 	    {/*Q4. Placeholder to enter passenger details. Below code is just an example.*/}
         <label>Name: </label>
-        <input type="text" name="travellerName"/>
-        <br />
+        <input type="text" name="travellerName" required/>
+
         <label>Phone: </label>
-        <input type="text" name="travellerPhone"/>
-        <br />
+        <input type="text" name="travellerPhone" required/>
+
         <label>Email: </label>
-        <input type="text" name="travellerEmail"/>
-        <br />
+        <input type="text" name="travellerEmail" required/>
+
         <label>Age: </label>
-        <input type="text" name="travellerAge"/>
-        <br />
+        <input type="text" name="travellerAge" required/>
+
         <label>Passport Number: </label>
-        <input type="text" name="travellerPassport"/>
-        <br />
-        <label>Booking Number: </label>
-        {/* <input type="select" name="travellerBookingNumber"/>*/}
-        <select name="travellerBookingNumber">
-          <option key="SG123" value="SG123">SG123</option>
-          <option key="SG234" value="SG234">SG234</option>
-          <option key="SG345" value="SG345">SG345</option>
+        <input type="text" name="travellerPassport" required/>
+
+        <label>Gender: </label>
+        <select name="travellerGender" required>
+          <option key="male" value="male">male</option>
+          <option key="female" value="female">female</option>
+          <option key="others" value="others">others</option>
         </select>
-        <br />
+
         <label>Booking Seat: </label>
-        <select name="travellerBookingSeat">
+        <select name="travellerBookingSeat" required>
           {this.props.seats[0].seats.map((row, rowIndex) => (
             row.map((seat, colIndex) => (
-              <option key={'0' + `${colIndex + 1}` + String.fromCharCode(65 + rowIndex)} value={'0' + `${colIndex + 1}` + String.fromCharCode(65 + rowIndex)}>
+              <option disabled={seat === 'reserved'} key={'0' + `${colIndex + 1}` + String.fromCharCode(65 + rowIndex)} value={'0' + `${colIndex + 1}` + String.fromCharCode(65 + rowIndex)}>
                 {'0' + `${colIndex + 1}` + String.fromCharCode(65 + rowIndex)}
               </option>
             )))
           )}
         </select>
-        <br />
+
         <button>Add</button>
       </form>
     );
@@ -156,14 +155,14 @@ class Delete extends React.Component {
 
   render() {
     return (
-      <form name="deleteTraveller" onSubmit={this.handleSubmit}>
+      <form name="deleteTraveller" onSubmit={this.handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px', maxWidth: '400px' }}>
       {/*Q5. Placeholder form to enter information on which passenger's ticket needs to be deleted. Below code is just an example.*/}
-        <label>Name: </label>
+        <label>Name:</label>
         <input type="text" name="travellerName"/>
-        <br />
+
         <label>Passport Number: </label>
         <input type="text" name="travellerPassport"/>
-        <br />
+
         <button>Delete</button>
       </form>
     );
@@ -186,9 +185,8 @@ class Homepage extends React.Component {
         }, 0);
 
         return (
-          <div key={rideIndex} style={{ marginBottom: '20px' }}>
-            <hr />
-            <h3>Ride Number: {ride.rideNumber}</h3>
+          <div key={rideIndex}>
+            <h3 style={{ margin: '0' }}>Train Number: {ride.rideNumber}</h3>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {ride.seats.map((row, rowIndex) => (
                 <div key={rowIndex} style={{ display: 'flex' }}>
@@ -210,44 +208,10 @@ class Homepage extends React.Component {
               ))}
             </div>
             <h4>Unreserved Seats: {count} / 10</h4>
+            <hr /><br></br>
           </div>
         );
         })}
-        <hr />
-        <div className="flex">
-        <div
-          key="label_unreserved"
-          style={{
-            width: '40px',
-            height: '40px',
-            margin: '5px',
-            backgroundColor: 'green',
-            border: '1px solid black',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '12px',
-          }}
-        >
-        </div>
-        <span>Unreserved</span>
-        <div
-          key="label_reserved"
-          style={{
-            width: '40px',
-            height: '40px',
-            margin: '5px',
-            backgroundColor: 'grey',
-            border: '1px solid black',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '12px',
-          }}
-        >
-        </div>
-        <span>Reserved</span>
-        </div>
     </div>);
   }
 }
@@ -262,14 +226,6 @@ class TicketToRide extends React.Component {
     this.emptySeats = [
       {
         rideNumber: 'SG123',
-        seats: Array(2).fill().map(() => Array(5).fill('unreserved'))
-      },
-      {
-        rideNumber: 'SG234',
-        seats: Array(2).fill().map(() => Array(5).fill('unreserved'))
-      },
-      {
-        rideNumber: 'SG345',
         seats: Array(2).fill().map(() => Array(5).fill('unreserved'))
       }
     ];
@@ -321,27 +277,37 @@ class TicketToRide extends React.Component {
       email: passenger.email,
       age: passenger.age,
       passportNumber: passenger.passportNumber,
+      gender: passenger.gender,
       bookingTime: passenger.bookingTime,
-      bookingNumber: passenger.bookingNumber,
       bookingSeat: passenger.bookingSeat,
     });
     this.setState({travellers: newTravellers});
     this.updateSeats(passenger, 'add');
+    alert('Add Successful');
   }
 
   deleteTraveller(passenger) {
     /*Q5. Write code to delete a passenger from the traveller state variable.*/
     const newTravellers = this.state.travellers.slice();
-    const index = newTravellers.findIndex(traveller => traveller.name === passenger.name && traveller.passportNumber === passenger.passportNumber);
-    if (index < 0) {
-      alert('Traveller not found');
+    const indicesToDelete = newTravellers
+      .map((traveller, index) => 
+        traveller.name === passenger.name && traveller.passportNumber === passenger.passportNumber ? index : -1
+      )
+      .filter(index => index !== -1);
+
+    if (indicesToDelete.length === 0) {
+      alert('Traveller not found, or passport number does not match');
       return;
     }
-    newTravellers.splice(index, 1);
+
+    for (let i = indicesToDelete.length - 1; i >= 0; i--) {
+      newTravellers.splice(indicesToDelete[i], 1);
+      passenger.bookingSeat = this.state.travellers[indicesToDelete[i]].bookingSeat;
+      this.updateSeats(passenger, 'delete');
+    }
+
     this.setState({travellers: newTravellers});
-    passenger.bookingNumber = this.state.travellers[index].bookingNumber;
-    passenger.bookingSeat = this.state.travellers[index].bookingSeat;
-    this.updateSeats(passenger, 'delete');
+    alert('Delete Successful');
   }
 
   updateSeats(passenger, type) {
@@ -349,8 +315,7 @@ class TicketToRide extends React.Component {
     const row = curSeat.charCodeAt(2) - 65;
     const col = parseInt(curSeat[1]) - 1;
     const newSeats = this.state.seats;
-    const rideIndex = newSeats.findIndex(ride => ride.rideNumber === passenger.bookingNumber);
-    newSeats[rideIndex].seats[row][col] = type === 'add' ? 'reserved' : 'unreserved';
+    newSeats[0].seats[row][col] = type === 'add' ? 'reserved' : 'unreserved';
     this.setState({ seats: newSeats });
   }
 
@@ -366,6 +331,7 @@ class TicketToRide extends React.Component {
             <button style={{ marginRight: '10px' }} onClick={() => this.setSelector(3)}>Add</button>
             <button onClick={() => this.setSelector(4)}>Delete</button>
           </nav>
+          <br></br><hr /><br></br>
       </div>
       <div>
         {/*Only one of the below four divisions is rendered based on the button clicked by the user.*/}
