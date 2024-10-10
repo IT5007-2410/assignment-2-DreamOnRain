@@ -250,6 +250,7 @@ class TicketToRide extends React.Component {
   }
 
   componentDidMount() {
+    this.setSelector(1);
     this.loadData();
   }
 
